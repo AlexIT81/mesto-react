@@ -58,63 +58,7 @@ function App() {
               <span className="popup__error link-input-error"></span>
             </>} />
         }
-        {/* <div className="popup popup_edit">
-          <div className="popup__container">
-            <h2 className="popup__title">Редактировать профиль</h2>
-            <form className="popup__form" action="./" name="edit" novalidate>
-              <input className="popup__input popup__input_name" type="text" name="name" minlength="2" maxlength="40" required placeholder="Имя" />
-              <span className="popup__error name-input-error"></span>
-              <input className="popup__input popup__input_job" type="text" name="job" minlength="2" maxlength="200" required placeholder="Профессия" />
-              <span className="popup__error job-input-error"></span>
-              <button className="popup__button" type="submit">Сохранить</button>
-            </form>
-            <button className="popup__close main-link" type="button"></button>
-          </div>
-        </div>
-        <div className="popup popup_add">
-          <div className="popup__container">
-            <h2 className="popup__title">Новое место</h2>
-            <form className="popup__form" action="./" name="add" novalidate>
-              <input className="popup__input popup__input_title" type="text" name="title" minlength="2" maxlength="30" required placeholder="Название" />
-              <span className="popup__error title-input-error"></span>
-              <input className="popup__input popup__input_link" type="url" name="link" required placeholder="Ссылка на картинку" />
-              <span className="popup__error link-input-error"></span>
-              <button className="popup__button" type="submit">Сохранить</button>
-            </form>
-            <button className="popup__close main-link" type="button"></button>
-          </div>
-        </div>
-        <div className="popup popup_image">
-          <div className="popup__image-wrapper">
-            <figure className="popup__figure">
-              <img className="popup__big-image" src="https://plus.unsplash.com/premium_photo-1675949335329-d42910909742?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80" alt="Байкал" />
-              <figcaption className="popup__figcaption">Байкал</figcaption>
-            </figure>
-            <button className="popup__close main-link" type="button"></button>
-          </div>
-        </div>
-        <div className="popup popup_confirm">
-          <div className="popup__container">
-            <h2 className="popup__title popup__title_place_confirm">Вы уверены?</h2>
-            <form className="popup__form" name="confirm" novalidate>
-              <button className="popup__button" type="submit">Да</button>
-            </form>
-            <button className="popup__close main-link" type="button"></button>
-          </div>
-        </div>
-        <div className="popup popup_update-avatar">
-          <div className="popup__container">
-            <h2 className="popup__title">Обновить аватар</h2>
-            <form className="popup__form" action="./" name="update-avatar" novalidate>
-              <input className="popup__input popup__input_name" type="url" name="link" required placeholder="Ссылка на аватар" />
-              <span className="popup__error link-input-error"></span>
-              <button className="popup__button" type="submit">Сохранить</button>
-            </form>
-            <button className="popup__close main-link" type="button"></button>
-          </div>
-        </div> */}
       </div>
-
       <template id="element">
         <li className="element">
           <img className="element__img" src="https://plus.unsplash.com/premium_photo-1675949335329-d42910909742?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80" alt="Байкал" />
