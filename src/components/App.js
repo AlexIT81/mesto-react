@@ -3,11 +3,13 @@ import Header from './Header.js';
 import Main from './Main.js';
 import Footer from './Footer.js';
 import PopupWithForm from './PopupWithForm.js';
+import ImagePopup from './ImagePopup.js';
 
 function App() {
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = React.useState(false);
   const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = React.useState(false);
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = React.useState(false);
+  const [selectedCard, setSelectedCard] = React.useState({isOpen: false, link: '', name: ''});
 
   function handleEditProfileClick() {
     setIsEditProfilePopupOpen(true);
@@ -21,17 +23,22 @@ function App() {
     setIsEditAvatarPopupOpen(true);
   }
 
+  function handleCardClick(card) {
+    setSelectedCard({isOpen: true, link: card.link, name: card.name});
+  }
+
   function closeAllPopups() {
     setIsEditProfilePopupOpen(false);
     setIsAddPlacePopupOpen(false);
     setIsEditAvatarPopupOpen(false);
+    setSelectedCard(false);
   }
 
   return (
     <div className="page">
       <div className="root page__root">
         <Header />
-        <Main onEditProfile={handleEditProfileClick} onAddPlace={handleAddPlaceClick} onEditAvatar={handleEditAvatarClick} />
+        <Main onEditProfile={handleEditProfileClick} onAddPlace={handleAddPlaceClick} onEditAvatar={handleEditAvatarClick} onCardClick={handleCardClick} />
         <Footer />
         {isEditProfilePopupOpen &&
           <PopupWithForm name={'edit'} title={'Редактировать профиль'} isOpen={true} onClose={closeAllPopups} children={
@@ -58,20 +65,8 @@ function App() {
               <span className="popup__error link-input-error"></span>
             </>} />
         }
+        {selectedCard && <ImagePopup card={selectedCard} onClose={closeAllPopups}/>}
       </div>
-      <template id="element">
-        <li className="element">
-          <img className="element__img" src="https://plus.unsplash.com/premium_photo-1675949335329-d42910909742?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80" alt="Байкал" />
-          <button className="element__trash main-link" type="button"></button>
-          <div className="element__block">
-            <h2 className="element__title">Заголовок</h2>
-            <div className="element__icon-wrapper">
-              <button className="element__icon" type="button"></button>
-              <span className="element__icon-count">1</span>
-            </div>
-          </div>
-        </li>
-      </template>
     </div>
   );
 }
