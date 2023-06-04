@@ -31,7 +31,7 @@ function App() {
     setIsEditProfilePopupOpen(false);
     setIsAddPlacePopupOpen(false);
     setIsEditAvatarPopupOpen(false);
-    setSelectedCard(false);
+    setSelectedCard({ isOpen: false, link: '', name: '' });
   }
 
   return (
@@ -41,29 +41,27 @@ function App() {
         <Main onEditProfile={handleEditProfileClick} onAddPlace={handleAddPlaceClick} onEditAvatar={handleEditAvatarClick} onCardClick={handleCardClick} />
         <Footer />
         {isEditProfilePopupOpen &&
-          <PopupWithForm name={'edit'} title={'Редактировать профиль'} isOpen={true} onClose={closeAllPopups} children={
-            <>
-              <input className="popup__input popup__input_name" type="text" name="name" minLength="2" maxLength="40" required placeholder="Имя" />
-              <span className="popup__error name-input-error"></span>
-              <input className="popup__input popup__input_job" type="text" name="job" minLength="2" maxLength="200" required placeholder="Профессия" />
-              <span className="popup__error job-input-error"></span>
-            </>} />
+          <PopupWithForm name={'edit'} title={'Редактировать профиль'} isOpen={true} onClose={closeAllPopups} buttonText={'Сохранить'}>
+            <input className="popup__input popup__input_name" type="text" name="name" minLength="2" maxLength="40" required placeholder="Имя" />
+            <span className="popup__error name-input-error"></span>
+            <input className="popup__input popup__input_job" type="text" name="job" minLength="2" maxLength="200" required placeholder="Профессия" />
+            <span className="popup__error job-input-error"></span>
+          </PopupWithForm>
         }
         {isAddPlacePopupOpen &&
-          <PopupWithForm name={'add'} title={'Новое место'} isOpen={true} onClose={closeAllPopups} children={
-            <>
-              <input className="popup__input popup__input_title" type="text" name="title" minLength="2" maxLength="30" required placeholder="Название" />
-              <span className="popup__error title-input-error"></span>
-              <input className="popup__input popup__input_link" type="url" name="link" required placeholder="Ссылка на картинку" />
-              <span className="popup__error link-input-error"></span>
-            </>} />
+          <PopupWithForm name={'add'} title={'Новое место'} isOpen={true} onClose={closeAllPopups} buttonText={'Создать'}>
+            <input className="popup__input popup__input_title" type="text" name="title" minLength="2" maxLength="30" required placeholder="Название" />
+            <span className="popup__error title-input-error"></span>
+            <input className="popup__input popup__input_link" type="url" name="link" required placeholder="Ссылка на картинку" />
+            <span className="popup__error link-input-error"></span>
+          </PopupWithForm>
         }
         {isEditAvatarPopupOpen &&
-          <PopupWithForm name={'update-avatar'} title={'Обновить аватар'} isOpen={true} onClose={closeAllPopups} children={
-            <>
-              <input className="popup__input popup__input_name" type="url" name="link" required placeholder="Ссылка на аватар" />
-              <span className="popup__error link-input-error"></span>
-            </>} />
+          <PopupWithForm name={'update-avatar'} title={'Обновить аватар'} isOpen={true} onClose={closeAllPopups} buttonText={'Сохранить'}>
+
+            <input className="popup__input popup__input_name" type="url" name="link" required placeholder="Ссылка на аватар" />
+            <span className="popup__error link-input-error"></span>
+          </PopupWithForm>
         }
         {selectedCard && <ImagePopup card={selectedCard} onClose={closeAllPopups} />}
       </div>
