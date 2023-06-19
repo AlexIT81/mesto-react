@@ -1,18 +1,18 @@
 import React from "react";
 import api from '../utils/Api.js';
 import Card from './Card.js';
+import { CurrentUserContext } from '../contexts/CurrentUserContext.js';
 
 function Main({onAddPlace, onCardClick, onEditAvatar, onEditProfile}) {
-  const [userInfo, setUserInfo] = React.useState({ userName: '', userDescription: '', userAvatar: '' });
+  // const [userInfo, setUserInfo] = React.useState({ userName: '', userDescription: '', userAvatar: '' });
   const [cards, setCards] = React.useState([]);
+  const currentUser = React.useContext(CurrentUserContext);
 
   React.useEffect(() => {
     api
-      .getServerData()
+      ._getInitialCards()
       .then((res) => {
-        const [initialCards, userData] = res;
-        setUserInfo({ userName: userData.name, userDescription: userData.about, userAvatar: userData.avatar })
-        setCards(initialCards);
+        setCards(res);
       })
       .catch((err) => {
         console.error(err);
@@ -22,14 +22,14 @@ function Main({onAddPlace, onCardClick, onEditAvatar, onEditProfile}) {
   return (
     <main className="root__main">
       <section className="profile root__profile">
-        <img src={userInfo.userAvatar} alt={userInfo.userDescription} className="profile__avatar" />
+        <img src={currentUser.avatar} alt={currentUser.about} className="profile__avatar" />
         <button className="profile__avatar-btn" onClick={onEditAvatar} type="button"></button>
         <div className="profile__info-wrapper">
           <div className="profile__info">
-            <h1 className="profile__title">{userInfo.userName}</h1>
+            <h1 className="profile__title">{currentUser.name}</h1>
             <button className="profile__edit-btn main-link" onClick={onEditProfile} type="button"></button>
           </div>
-          <p className="profile__sub-title">{userInfo.userDescription}</p>
+          <p className="profile__sub-title">{currentUser.about}</p>
         </div>
         <button className="profile__add-btn main-link" onClick={onAddPlace} type="button"></button>
       </section>

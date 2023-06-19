@@ -4,12 +4,26 @@ import Main from './Main.js';
 import Footer from './Footer.js';
 import PopupWithForm from './PopupWithForm.js';
 import ImagePopup from './ImagePopup.js';
+import api from '../utils/Api.js';
+import { CurrentUserContext } from '../contexts/CurrentUserContext.js';
 
 function App() {
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = React.useState(false);
   const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = React.useState(false);
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = React.useState(false);
   const [selectedCard, setSelectedCard] = React.useState({ isOpen: false, link: '', name: '' });
+  const [currentUser, setCurrentUser] = React.useState({});
+
+  React.useEffect(() => {
+    api
+      .getUserInfo()
+      .then((res) => {
+        setCurrentUser(res);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  }, []);
 
   function handleEditProfileClick() {
     setIsEditProfilePopupOpen(true);
@@ -38,7 +52,9 @@ function App() {
     <div className="page">
       <div className="root page__root">
         <Header />
-        <Main onEditProfile={handleEditProfileClick} onAddPlace={handleAddPlaceClick} onEditAvatar={handleEditAvatarClick} onCardClick={handleCardClick} />
+        <CurrentUserContext.Provider value={currentUser}>
+          <Main onEditProfile={handleEditProfileClick} onAddPlace={handleAddPlaceClick} onEditAvatar={handleEditAvatarClick} onCardClick={handleCardClick} />
+        </CurrentUserContext.Provider>
         <Footer />
         {isEditProfilePopupOpen &&
           <PopupWithForm name={'edit'} title={'Редактировать профиль'} isOpen={true} onClose={closeAllPopups} buttonText={'Сохранить'}>
@@ -63,7 +79,7 @@ function App() {
             <span className="popup__error link-input-error"></span>
           </PopupWithForm>
         }
-        {selectedCard && <ImagePopup card={selectedCard} onClose={closeAllPopups} />}
+        {selectedCard && <ImagePopup card={selectedCard} onClose={closeAllPopups} />}        
       </div>
     </div>
   );
