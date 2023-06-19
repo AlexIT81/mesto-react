@@ -13,16 +13,17 @@ function App() {
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = React.useState(false);
   const [selectedCard, setSelectedCard] = React.useState({ isOpen: false, link: '', name: '' });
   const [currentUser, setCurrentUser] = React.useState({});
+  const [cards, setCards] = React.useState([]);
 
   React.useEffect(() => {
     api
-      .getUserInfo()
+      .getServerData()
       .then((res) => {
-        setCurrentUser(res);
+        const [initialCards, userData] = res;
+        setCurrentUser(userData);
+        setCards(initialCards);
       })
-      .catch((err) => {
-        console.error(err);
-      });
+      .catch(err => console.error(err));
   }, []);
 
   function handleEditProfileClick() {
@@ -48,12 +49,30 @@ function App() {
     setSelectedCard({ isOpen: false, link: '', name: '' });
   }
 
+  function handleCardLike(card) {
+    const isLiked = card.likes.some(i => i._id === currentUser._id);
+    api
+      .changeLikeCardStatus(card._id, !isLiked)
+      .then((newCard) => {
+        setCards((state) => state.map((c) => c._id === card._id ? newCard : c));
+      })
+      .catch(err => console.error(err));
+  }
+
+  function handleCardDelete(card) {
+    // console.log(card);
+    api
+      .deleteCard(card._id)
+      .then(setCards(cards.filter((item) => item._id !==card._id)))
+      .catch(err => console.error(err));
+  }
+
   return (
     <div className="page">
       <div className="root page__root">
         <Header />
         <CurrentUserContext.Provider value={currentUser}>
-          <Main onEditProfile={handleEditProfileClick} onAddPlace={handleAddPlaceClick} onEditAvatar={handleEditAvatarClick} onCardClick={handleCardClick} />
+          <Main cards={cards} onEditProfile={handleEditProfileClick} onAddPlace={handleAddPlaceClick} onEditAvatar={handleEditAvatarClick} onCardClick={handleCardClick} onCardLike={handleCardLike} onCardDelete={handleCardDelete} />
         </CurrentUserContext.Provider>
         <Footer />
         {isEditProfilePopupOpen &&
@@ -79,7 +98,7 @@ function App() {
             <span className="popup__error link-input-error"></span>
           </PopupWithForm>
         }
-        {selectedCard && <ImagePopup card={selectedCard} onClose={closeAllPopups} />}        
+        {selectedCard && <ImagePopup card={selectedCard} onClose={closeAllPopups} />}
       </div>
     </div>
   );
