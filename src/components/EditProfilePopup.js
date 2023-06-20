@@ -2,7 +2,7 @@ import React from "react";
 import PopupWithForm from "./PopupWithForm";
 import { CurrentUserContext } from '../contexts/CurrentUserContext.js';
 
-function EditProfilePopup({ isOpen, onClose, onUpdateUser }) {
+function EditProfilePopup({ isOpen, onClose, onUpdateUser, buttonText }) {
   const [name, setName] = React.useState('');
   const [description, setDescription] = React.useState('');
   const currentUser = React.useContext(CurrentUserContext);
@@ -29,7 +29,7 @@ function EditProfilePopup({ isOpen, onClose, onUpdateUser }) {
   }
 
   return (
-    <PopupWithForm name={'edit'} title={'Редактировать профиль'} isOpen={isOpen} onClose={onClose} buttonText={'Сохранить'} onSubmit={handleSubmit}>
+    <PopupWithForm name={'edit'} title={'Редактировать профиль'} isOpen={isOpen} onClose={onClose} buttonText={buttonText} onSubmit={handleSubmit}>
       <input className="popup__input popup__input_name" type="text" name="name" minLength="2" maxLength="40" value={name || ''} onChange={handleNameChange} required placeholder="Имя" />
       <span className="popup__error name-input-error"></span>
       <input className="popup__input popup__input_job" type="text" name="job" minLength="2" maxLength="200" value={description || ''} onChange={handleDescriptionChange} required placeholder="Профессия" />

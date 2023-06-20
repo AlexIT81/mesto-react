@@ -16,6 +16,7 @@ function App() {
   const [selectedCard, setSelectedCard] = React.useState({ isOpen: false, link: '', name: '' });
   const [currentUser, setCurrentUser] = React.useState({});
   const [cards, setCards] = React.useState([]);
+  const [buttonText, setButtonText] = React.useState('');
 
   React.useEffect(() => {
     api
@@ -30,14 +31,17 @@ function App() {
 
   function handleEditProfileClick() {
     setIsEditProfilePopupOpen(true);
+    setButtonText('Сохранить');
   }
 
   function handleAddPlaceClick() {
     setIsAddPlacePopupOpen(true);
+    setButtonText('Добавить');
   }
 
   function handleEditAvatarClick() {
     setIsEditAvatarPopupOpen(true);
+    setButtonText('Обновить');
   }
 
   function handleCardClick(card) {
@@ -69,29 +73,46 @@ function App() {
   }
 
   function handleUpdateUser({ name, about }) {
+    setButtonText('Сохранение..');
     api
       .setUserInfo({ name, about })
-      .then(res => setCurrentUser(res))
+      .then(
+        (userData) => {
+          setCurrentUser(userData);
+          closeAllPopups();
+        }
+      )
       .catch(err => console.error(err))
-      .finally(closeAllPopups());
-
+      .finally(() => setButtonText('Сохранить'));
   }
 
   function handleUpdateAvatar({ avatar }) {
+    setButtonText('Обновление...');
     api
       .setAvatar(avatar)
-      .then(res => setCurrentUser(res))
+      .then(
+        (userData) => {
+          setCurrentUser(userData);
+          closeAllPopups();
+        }
+      )
       .catch(err => console.error(err))
-      .finally(closeAllPopups());
+      .finally(() => setButtonText('Обновить'));
 
   }
 
   function handleAddPlaceSubmit({ name, link }) {
+    setButtonText('Добавление...');
     api
       .addNewCard({ name, link })
-      .then(newCard => setCards([newCard, ...cards]))
+      .then(
+        (newCard) => {
+          setCards([newCard, ...cards]);
+          closeAllPopups();
+        }
+      )
       .catch(err => console.error(err))
-      .finally(closeAllPopups());
+      .finally(() => setButtonText('Добавить'));
   }
 
   return (
@@ -101,9 +122,9 @@ function App() {
           <Header />
           <Main cards={cards} onEditProfile={handleEditProfileClick} onAddPlace={handleAddPlaceClick} onEditAvatar={handleEditAvatarClick} onCardClick={handleCardClick} onCardLike={handleCardLike} onCardDelete={handleCardDelete} />
           <Footer />
-          <EditProfilePopup isOpen={isEditProfilePopupOpen} onClose={closeAllPopups} onUpdateUser={handleUpdateUser} />
-          <AddPlacePopup isOpen={isAddPlacePopupOpen} onClose={closeAllPopups} onAddPlace={handleAddPlaceSubmit} />
-          <EditAvatarPopup isOpen={isEditAvatarPopupOpen} onClose={closeAllPopups} onUpdateAvatar={handleUpdateAvatar} />
+          <EditProfilePopup isOpen={isEditProfilePopupOpen} onClose={closeAllPopups} onUpdateUser={handleUpdateUser} buttonText={buttonText} />
+          <AddPlacePopup isOpen={isAddPlacePopupOpen} onClose={closeAllPopups} onAddPlace={handleAddPlaceSubmit} buttonText={buttonText} />
+          <EditAvatarPopup isOpen={isEditAvatarPopupOpen} onClose={closeAllPopups} onUpdateAvatar={handleUpdateAvatar} buttonText={buttonText} />
           {selectedCard && <ImagePopup card={selectedCard} onClose={closeAllPopups} />}
         </CurrentUserContext.Provider>
       </div>
