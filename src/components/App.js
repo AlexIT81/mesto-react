@@ -7,6 +7,7 @@ import ImagePopup from './ImagePopup.js';
 import api from '../utils/Api.js';
 import { CurrentUserContext } from '../contexts/CurrentUserContext.js';
 import EditProfilePopup from './EditProfilePopup.js';
+import EditAvatarPopup from './EditAvatarPopup.js';
 
 function App() {
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = React.useState(false);
@@ -76,6 +77,15 @@ function App() {
 
   }
 
+  function handleUpdateAvatar({avatar}) {
+    api
+      .setAvatar(avatar)
+      .then(res => setCurrentUser(res))
+      .catch(err => console.error(err))
+      .finally(closeAllPopups());
+
+  }
+
   return (
     <div className="page">
       <div className="root page__root">
@@ -100,13 +110,14 @@ function App() {
               <span className="popup__error link-input-error"></span>
             </PopupWithForm>
           }
-          {isEditAvatarPopupOpen &&
+          {/* {isEditAvatarPopupOpen &&
             <PopupWithForm name={'update-avatar'} title={'Обновить аватар'} isOpen={true} onClose={closeAllPopups} buttonText={'Сохранить'}>
 
               <input className="popup__input popup__input_name" type="url" name="link" required placeholder="Ссылка на аватар" />
               <span className="popup__error link-input-error"></span>
             </PopupWithForm>
-          }
+          } */}
+          <EditAvatarPopup isOpen={isEditAvatarPopupOpen} onClose={closeAllPopups} onUpdateAvatar={handleUpdateAvatar} />
           {selectedCard && <ImagePopup card={selectedCard} onClose={closeAllPopups} />}
         </CurrentUserContext.Provider>
       </div>

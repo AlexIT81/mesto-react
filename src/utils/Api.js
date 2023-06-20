@@ -38,20 +38,6 @@ class Api {
     return Promise.all([this._getInitialCards(), this.getUserInfo()]);
   }
 
-  editUserInfo({ name, job }) {
-    return fetch(`${this._apiUrl}${this._apiCohortId}/users/me`, {
-      method: "PATCH",
-      headers: {
-        authorization: this._apiToken,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        name: name,
-        about: job,
-      }),
-    }).then(this._checkRes);
-  }
-
   setUserInfo({ name, about }) {
     return fetch(`${this._apiUrl}${this._apiCohortId}/users/me`, {
       method: "PATCH",
@@ -60,8 +46,8 @@ class Api {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        name: name,
-        about: about,
+        name,
+        about,
       }),
     }).then(this._checkRes);
   }
@@ -115,7 +101,7 @@ class Api {
     }
   }
 
-  setAvatar(data) {
+  setAvatar(avatar) {
     return fetch(`${this._apiUrl}${this._apiCohortId}/users/me/avatar`, {
       method: "PATCH",
       headers: {
@@ -123,7 +109,7 @@ class Api {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        avatar: data.link,
+        avatar,
       }),
     }).then(this._checkRes);
   }
