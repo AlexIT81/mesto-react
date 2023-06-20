@@ -8,6 +8,7 @@ import { CurrentUserContext } from '../contexts/CurrentUserContext.js';
 import EditProfilePopup from './EditProfilePopup.js';
 import EditAvatarPopup from './EditAvatarPopup.js';
 import AddPlacePopup from './AddPlacePopup.js';
+import DeleteCardConfirmPopup from './DeleteCardConfirmPopup.js';
 
 function App() {
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = React.useState(false);
@@ -17,6 +18,7 @@ function App() {
   const [currentUser, setCurrentUser] = React.useState({});
   const [cards, setCards] = React.useState([]);
   const [buttonText, setButtonText] = React.useState('');
+  const [deleteCardConfirm, setDeleteCardConfirm] = React.useState({ isOpen: false, card: {} });
 
   React.useEffect(() => {
     api
@@ -53,6 +55,7 @@ function App() {
     setIsAddPlacePopupOpen(false);
     setIsEditAvatarPopupOpen(false);
     setSelectedCard({ isOpen: false, link: '', name: '' });
+    setDeleteCardConfirm({ isOpen: false, card: '' })
   }
 
   function handleCardLike(card) {
@@ -62,13 +65,6 @@ function App() {
       .then((newCard) => {
         setCards((state) => state.map((c) => c._id === card._id ? newCard : c));
       })
-      .catch(err => console.error(err));
-  }
-
-  function handleCardDelete(card) {
-    api
-      .deleteCard(card._id)
-      .then(setCards(cards.filter((item) => item._id !== card._id)))
       .catch(err => console.error(err));
   }
 
@@ -115,16 +111,38 @@ function App() {
       .finally(() => setButtonText('Добавить'));
   }
 
+  function handleCardDelete() {
+    setButtonText('Удаление...');
+    api
+      .deleteCard(deleteCardConfirm.card._id)
+      .then(
+        () => {
+          setCards(cards.filter((item) => item._id !== deleteCardConfirm.card._id));
+          closeAllPopups();
+          setDeleteCardConfirm({ isOpen: false, card: {} });
+        }
+      )
+      .catch(err => console.error(err))
+      .finally(() => setButtonText('Да!'));
+  }
+
+  function handleCardDeleteConfirmClick(card) {
+    setDeleteCardConfirm({ isOpen: true, card: card });
+    setButtonText('Да!');
+
+  }
+
   return (
     <div className="page">
       <div className="root page__root">
         <CurrentUserContext.Provider value={currentUser}>
           <Header />
-          <Main cards={cards} onEditProfile={handleEditProfileClick} onAddPlace={handleAddPlaceClick} onEditAvatar={handleEditAvatarClick} onCardClick={handleCardClick} onCardLike={handleCardLike} onCardDelete={handleCardDelete} />
+          <Main cards={cards} onEditProfile={handleEditProfileClick} onAddPlace={handleAddPlaceClick} onEditAvatar={handleEditAvatarClick} onCardClick={handleCardClick} onCardLike={handleCardLike} onCardDelete={handleCardDeleteConfirmClick} />
           <Footer />
           <EditProfilePopup isOpen={isEditProfilePopupOpen} onClose={closeAllPopups} onUpdateUser={handleUpdateUser} buttonText={buttonText} />
           <AddPlacePopup isOpen={isAddPlacePopupOpen} onClose={closeAllPopups} onAddPlace={handleAddPlaceSubmit} buttonText={buttonText} />
           <EditAvatarPopup isOpen={isEditAvatarPopupOpen} onClose={closeAllPopups} onUpdateAvatar={handleUpdateAvatar} buttonText={buttonText} />
+          <DeleteCardConfirmPopup isOpen={deleteCardConfirm.isOpen} onClose={closeAllPopups} onDeleteCard={handleCardDelete} card={setDeleteCardConfirm.card} buttonText={buttonText} />
           {selectedCard && <ImagePopup card={selectedCard} onClose={closeAllPopups} />}
         </CurrentUserContext.Provider>
       </div>
