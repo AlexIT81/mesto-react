@@ -52,6 +52,20 @@ class Api {
     }).then(this._checkRes);
   }
 
+  setUserInfo({ name, about }) {
+    return fetch(`${this._apiUrl}${this._apiCohortId}/users/me`, {
+      method: "PATCH",
+      headers: {
+        authorization: this._apiToken,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        name: name,
+        about: about,
+      }),
+    }).then(this._checkRes);
+  }
+
   addNewCard(data) {
     return fetch(`${this._apiUrl}${this._apiCohortId}/cards`, {
       method: "POST",
