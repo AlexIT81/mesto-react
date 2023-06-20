@@ -142,7 +142,7 @@ function App() {
           <EditProfilePopup isOpen={isEditProfilePopupOpen} onClose={closeAllPopups} onUpdateUser={handleUpdateUser} buttonText={buttonText} />
           <AddPlacePopup isOpen={isAddPlacePopupOpen} onClose={closeAllPopups} onAddPlace={handleAddPlaceSubmit} buttonText={buttonText} />
           <EditAvatarPopup isOpen={isEditAvatarPopupOpen} onClose={closeAllPopups} onUpdateAvatar={handleUpdateAvatar} buttonText={buttonText} />
-          <DeleteCardConfirmPopup isOpen={deleteCardConfirm.isOpen} onClose={closeAllPopups} onDeleteCard={handleCardDelete} card={setDeleteCardConfirm.card} buttonText={buttonText} />
+          <DeleteCardConfirmPopup isOpen={deleteCardConfirm.isOpen} onClose={closeAllPopups} onDeleteCard={handleCardDelete} buttonText={buttonText} />
           {selectedCard && <ImagePopup card={selectedCard} onClose={closeAllPopups} />}
         </CurrentUserContext.Provider>
       </div>
